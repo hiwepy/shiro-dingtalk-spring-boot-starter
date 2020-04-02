@@ -1,0 +1,9 @@
+server:
+    port: 8080
+
+shiro: 
+  enabled: true
+  sessionManager:
+    sessionIdCookieEnabled: true
+    sessionIdUrlRewritingEnabled:  true
+  dingtalk:    enabled: true
