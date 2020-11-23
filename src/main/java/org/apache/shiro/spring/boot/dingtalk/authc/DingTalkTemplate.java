@@ -21,23 +21,15 @@ import java.util.concurrent.TimeUnit;
 import com.alibaba.fastjson.JSONObject;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
-import com.dingtalk.api.request.OapiDepartmentGetRequest;
 import com.dingtalk.api.request.OapiGettokenRequest;
-import com.dingtalk.api.request.OapiSnsGetPersistentCodeRequest;
-import com.dingtalk.api.request.OapiSnsGetSnsTokenRequest;
 import com.dingtalk.api.request.OapiSnsGettokenRequest;
 import com.dingtalk.api.request.OapiSnsGetuserinfoBycodeRequest;
-import com.dingtalk.api.request.OapiSnsGetuserinfoRequest;
 import com.dingtalk.api.request.OapiUserGetRequest;
 import com.dingtalk.api.request.OapiUserGetUseridByUnionidRequest;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
-import com.dingtalk.api.response.OapiDepartmentGetResponse;
 import com.dingtalk.api.response.OapiGettokenResponse;
-import com.dingtalk.api.response.OapiSnsGetPersistentCodeResponse;
-import com.dingtalk.api.response.OapiSnsGetSnsTokenResponse;
 import com.dingtalk.api.response.OapiSnsGettokenResponse;
 import com.dingtalk.api.response.OapiSnsGetuserinfoBycodeResponse;
-import com.dingtalk.api.response.OapiSnsGetuserinfoResponse;
 import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserGetUseridByUnionidResponse;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
@@ -151,48 +143,58 @@ public class DingTalkTemplate {
 			});
 
 	/**
-	 * 
-	 * 	企业内部开发获取access_token 先从缓存查，再到钉钉查
+	 * 企业内部开发获取access_token 先从缓存查，再到钉钉查
 	 * https://open-doc.dingtalk.com/microapp/serverapi2/eev437
 	 * @param appKey    企业Id
 	 * @param appSecret 企业应用的凭证密钥
-	 * @return
-	 * @throws ExecutionException
+	 * @return the AccessToken
+	 * @throws ApiException if get AccessToken Exception
 	 */
-	public String getAccessToken(String appKey, String appSecret) throws ExecutionException {
+	public String getAccessToken(String appKey, String appSecret) throws ApiException {
+		try {
+			
+			JSONObject key = new JSONObject();
+			key.put("appKey", appKey);
+			key.put("appSecret", appSecret);
 
-		JSONObject key = new JSONObject();
-		key.put("appKey", appKey);
-		key.put("appSecret", appSecret);
-
-		Optional<String> opt = ACCESS_TOKEN_CACHES.get(key.toJSONString());
-		return opt.isPresent() ? opt.get() : null;
-
+			Optional<String> opt = ACCESS_TOKEN_CACHES.get(key.toJSONString());
+			return opt.isPresent() ? opt.get() : null;
+			
+		} catch (ExecutionException e) {
+			throw new ApiException(e);
+		}
 	}
 	
 	/**
 	 * 获取钉钉开放应用的ACCESS_TOKEN
 	 * 
-	 * @param appKey
-	 * @param appSecret
-	 * @return
-	 * @throws ExecutionException
+	 * @param appId    企业Id
+	 * @param appSecret 企业应用的凭证密钥
+	 * @return the AccessToken
+	 * @throws ApiException if get AccessToken Exception
 	 */
-	public String getOpenToken(String appId, String appSecret) throws ExecutionException {
-
-		JSONObject key = new JSONObject();
-		key.put("appId", appId);
-		key.put("appSecret", appSecret);
-
-		Optional<String> opt = SNS_ACCESS_TOKEN_CACHES.get(key.toJSONString());
-		return opt.isPresent() ? opt.get() : null;
-
+	public String getOpenToken(String appId, String appSecret) throws ApiException {
+		try {
+			
+			JSONObject key = new JSONObject();
+			key.put("appId", appId);
+			key.put("appSecret", appSecret);
+	
+			Optional<String> opt = SNS_ACCESS_TOKEN_CACHES.get(key.toJSONString());
+			return opt.isPresent() ? opt.get() : null;
+		} catch (ExecutionException e) {
+			throw new ApiException(e);
+		}
 	}
 	
 	/**
 	 * 企业内部应用免登录：通过免登授权码和access_token获取用户信息
 	 * https://ding-doc.dingtalk.com/doc#/serverapi2/clotub
-	 * @throws ApiException 
+	 * 
+	 * @param code    		免登授权码，参考上述“获取免登授权码”
+	 * @param accessToken 	调用接口凭证
+	 * @return the OapiUserGetuserinfoResponse
+	 * @throws ApiException if Api request Exception
 	 */
 	public OapiUserGetuserinfoResponse getUserinfoBycode( String code, String accessToken) throws ApiException {
 		DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/user/getuserinfo");
@@ -205,19 +207,27 @@ public class DingTalkTemplate {
 	/**
 	 * 第三方应用钉钉扫码登录：通过临时授权码Code获取用户信息，临时授权码只能使用一次。
 	 * https://open-doc.dingtalk.com/microapp/serverapi2/kymkv6
-	 * @throws ApiException 
+	 * @param tmp_auth_code 用户授权的临时授权码code，只能使用一次；在前面步骤中跳转到redirect_uri时会追加code参数
+	 * @param accessKey 	应用的appId
+	 * @param accessSecret 	应用的secret
+	 * @return the OapiUserGetuserinfoResponse
+	 * @throws ApiException if Api request Exception 
 	 */
-	public OapiSnsGetuserinfoBycodeResponse getSnsGetuserinfoBycode( String code, String accessKey, String accessSecret) throws ApiException {
+	public OapiSnsGetuserinfoBycodeResponse getSnsGetuserinfoBycode( String tmp_auth_code, String accessKey, String accessSecret) throws ApiException {
 		DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/sns/getuserinfo_bycode");
 		OapiSnsGetuserinfoBycodeRequest request = new OapiSnsGetuserinfoBycodeRequest();
-		request.setTmpAuthCode(code);
+		request.setTmpAuthCode(tmp_auth_code);
 		return client.execute(request, accessKey, accessSecret);
 	}
 	
 	/**
 	 * 根据unionid获取userid
 	 * https://open-doc.dingtalk.com/microapp/serverapi2/ege851#-5
-	 * @throws ApiException 
+	 * 
+	 * @param unionid 员工在当前企业内的唯一标识，也称staffId。可由企业在创建时指定，并代表一定含义比如工号，创建后不可修改，企业内必须唯一。长度为1~64个字符，如果不传，服务器将自动生成一个userid。
+	 * @param accessToken 	调用接口凭证
+	 * @return the OapiUserGetUseridByUnionidResponse
+	 * @throws ApiException if Api request Exception 
 	 */
 	public OapiUserGetUseridByUnionidResponse getUseridByUnionid( String unionid, String accessToken) throws ApiException {
 		
@@ -228,72 +238,14 @@ public class DingTalkTemplate {
 		
 		return client.execute(request, accessToken);
 	}
-	
-	/**
-	 * 获取用户授权的持久授权码
-	 * 
-	 * @param accessToken
-	 * @return
-	 */
-	public String get_persistent_code(String accessToken, String code) {
-		OapiSnsGetPersistentCodeResponse response = null;
-		try {
-			DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/sns/get_persistent_code");
-			OapiSnsGetPersistentCodeRequest request = new OapiSnsGetPersistentCodeRequest();
-			request.setTmpAuthCode(code);
-			response = client.execute(request, accessToken);
-		} catch (ApiException e) {
-			e.printStackTrace();
-		}
-		return response.getBody();
-	}
 
-	/**
-	 * 获取用户授权的SNS_TOKEN
-	 * 
-	 * @param openId
-	 * @param persistentCode
-	 * @param accessToken    开放应用的token
-	 * @return
-	 */
-	public String get_sns_token(String openId, String persistentCode, String accessToken) {
-		OapiSnsGetSnsTokenResponse response = null;
-		try {
-			DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/sns/get_sns_token");
-			OapiSnsGetSnsTokenRequest request = new OapiSnsGetSnsTokenRequest();
-			request.setOpenid(openId);
-			request.setPersistentCode(persistentCode);
-			response = client.execute(request, accessToken);
-		} catch (ApiException e) {
-			e.printStackTrace();
-		}
-		return response.getSnsToken();
-	}
-
-	/**
-	 * 获取用户授权的个人信息
-	 * 
-	 * @param snsToken
-	 * @return
-	 */
-	public String get_sns_userinfo_unionid(String snsToken) {
-		OapiSnsGetuserinfoResponse response = null;
-		try {
-			DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/sns/getuserinfo");
-			OapiSnsGetuserinfoRequest request = new OapiSnsGetuserinfoRequest();
-			request.setSnsToken(snsToken);
-			request.setHttpMethod(METHOD_GET);
-			response = client.execute(request);
-		} catch (ApiException e) {
-			e.printStackTrace();
-		}
-		return response.getBody();
-	}
-
-	/**
+	/*
 	 * 根据钉钉的userid拿取用户的详细信息(包括手机号，部门id，等)
 	 * https://open-doc.dingtalk.com/microapp/serverapi2/ege851
-	 * @throws ApiException 
+	 * @param userid 用户ID
+	 * @param accessToken 	调用接口凭证
+	 * @return the OapiUserGetResponse
+	 * @throws ApiException if Api request Exception 
 	 */
 	public OapiUserGetResponse getUserByUserid( String userid, String accessToken) throws ApiException {
 		
@@ -302,22 +254,6 @@ public class DingTalkTemplate {
 		request.setUserid(userid);
 		request.setHttpMethod(METHOD_GET);
 		
-		return client.execute(request, accessToken);
-	}
-
-	/**
-	 * 获取部门详情（根据部门id查询）
-	 * 
-	 * @param accessToken
-	 * @param deptid
-	 * @return
-	 * @throws ApiException
-	 */
-	public OapiDepartmentGetResponse getDepartmentInfo(String accessToken, String deptid) throws ApiException {
-		DingTalkClient client = new DefaultDingTalkClient(DINGTALK_SERVICE + "/department/get");
-		OapiDepartmentGetRequest request = new OapiDepartmentGetRequest();
-		request.setId(deptid);
-		request.setHttpMethod(METHOD_GET);
 		return client.execute(request, accessToken);
 	}
 

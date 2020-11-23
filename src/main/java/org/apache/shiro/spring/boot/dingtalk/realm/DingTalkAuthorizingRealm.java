@@ -2,7 +2,6 @@ package org.apache.shiro.spring.boot.dingtalk.realm;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -124,8 +123,6 @@ public class DingTalkAuthorizingRealm extends AbstractAuthorizingRealm implement
 			 
 		} catch (AuthenticationException e) {
 			ex = e;
-		} catch (ExecutionException e) {
-			ex = new AuthenticationException(e);
 		} catch (ApiException e) {
 			ex = new AuthenticationException(e);
 		}

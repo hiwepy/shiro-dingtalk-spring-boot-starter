@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>shiro-dingtalk-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Shiro With Dingtalk</description>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -392,14 +392,6 @@
 				<version>${spring-boot-starter-shiro-jwt.version}</version>
 			</dependency>
 			
-			<!--钉钉SDK : https://open-doc.dingtalk.com/microapp/faquestions/vzbp02-->
-			<dependency>
-				<groupId>com.dingtalk</groupId>
-				<artifactId>dingtalk-sdk</artifactId>
-				<version>20190704</version>
-				<scope>provided</scope>
-			</dependency>
-			
 		</dependencies>
 	</dependencyManagement>
 	
@@ -479,6 +471,8 @@
 		<dependency>
 			<groupId>com.dingtalk</groupId>
 			<artifactId>dingtalk-sdk</artifactId>
+			<version>20190704</version>
+			<scope>provided</scope>
 		</dependency>
 		
 	</dependencies>
