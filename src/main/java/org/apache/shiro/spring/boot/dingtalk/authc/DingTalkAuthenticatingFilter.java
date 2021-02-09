@@ -92,12 +92,12 @@ public class DingTalkAuthenticatingFilter extends AbstractTrustableAuthenticatin
 					LOG.trace(mString);
 				}
 				
-				WebUtils.toHttp(response).setStatus(HttpStatus.SC_BAD_REQUEST);
+				WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 				
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(mString));
+				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
 				
 				return false;
 			}
@@ -113,12 +113,12 @@ public class DingTalkAuthenticatingFilter extends AbstractTrustableAuthenticatin
 			// Ajax 请求：响应json数据对象
 			if (WebUtils.isAjaxRequest(request)) {
 				
-				WebUtils.toHttp(response).setStatus(HttpStatus.SC_UNAUTHORIZED);
+				WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 				
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(mString));
+				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
 				
 				return false;
 			}
