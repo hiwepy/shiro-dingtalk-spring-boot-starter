@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>shiro-dingtalk-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Shiro With Dingtalk</description>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2.RELEASE</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -365,8 +365,8 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 		<maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
-		<spring-boot-starter-shiro-biz.version>1.0.9.RELEASE</spring-boot-starter-shiro-biz.version>
-		<spring-boot-starter-shiro-jwt.version>1.1.1.RELEASE</spring-boot-starter-shiro-jwt.version>
+		<spring-boot-starter-shiro-biz.version>1.1.0.RELEASE</spring-boot-starter-shiro-biz.version>
+		<spring-boot-starter-shiro-jwt.version>1.1.2.RELEASE</spring-boot-starter-shiro-jwt.version>
 	</properties>
 	
 	<dependencyManagement>

@@ -83,6 +83,11 @@ public class DingTalkAuthenticationSuccessHandler implements AuthenticationSucce
 
 	}
 
+	@Override
+	public int getOrder() {
+		return Integer.MAX_VALUE - 2;
+	}
+	
 	public JwtPayloadRepository getJwtPayloadRepository() {
 		return jwtPayloadRepository;
 	}
