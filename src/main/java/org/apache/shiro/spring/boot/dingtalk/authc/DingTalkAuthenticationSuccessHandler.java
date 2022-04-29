@@ -28,7 +28,9 @@ import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 import org.apache.shiro.biz.utils.SubjectUtils;
 import org.apache.shiro.biz.utils.WebUtils;
 import org.apache.shiro.biz.web.servlet.http.HttpStatus;
-import org.apache.shiro.spring.boot.dingtalk.token.DingTalkAuthenticationToken;
+import org.apache.shiro.spring.boot.dingtalk.token.DingTalkMaAuthenticationToken;
+import org.apache.shiro.spring.boot.dingtalk.token.DingTalkScanCodeAuthenticationToken;
+import org.apache.shiro.spring.boot.dingtalk.token.DingTalkTmpCodeAuthenticationToken;
 import org.apache.shiro.spring.boot.jwt.JwtPayloadRepository;
 import org.apache.shiro.spring.boot.utils.SubjectJwtUtils;
 import org.apache.shiro.subject.Subject;
@@ -36,47 +38,47 @@ import org.springframework.http.MediaType;
 
 import com.alibaba.fastjson.JSONObject;
 
-
 public class DingTalkAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-	
+
 	private JwtPayloadRepository jwtPayloadRepository;
 	/** If Check JWT Validity. */
 	private boolean checkExpiry = false;
-	
+
 	public DingTalkAuthenticationSuccessHandler() {
 	}
-	 
+
 	public DingTalkAuthenticationSuccessHandler(JwtPayloadRepository jwtPayloadRepository, boolean checkExpiry) {
 		super();
 		this.jwtPayloadRepository = jwtPayloadRepository;
 		this.checkExpiry = checkExpiry;
 	}
-	
+
 	@Override
 	public boolean supports(AuthenticationToken token) {
-		return SubjectUtils.isAssignableFrom(token.getClass(), DingTalkAuthenticationToken.class);
+		return SubjectUtils.isAssignableFrom(token.getClass(), DingTalkMaAuthenticationToken.class,
+				DingTalkScanCodeAuthenticationToken.class, DingTalkTmpCodeAuthenticationToken.class);
 	}
 
 	@Override
 	public void onAuthenticationSuccess(AuthenticationToken token, ServletRequest request, ServletResponse response,
 			Subject subject) {
-		
+
 		try {
-			
+
 			String tokenString = "";
 			// 账号首次登陆标记
 			if(ShiroPrincipal.class.isAssignableFrom(subject.getPrincipal().getClass())) {
 				// JSON Web Token (JWT)
 				tokenString = getJwtPayloadRepository().issueJwt(token, subject, request, response);
-			} 
-			
+			}
+
 			Map<String, Object> tokenMap = SubjectJwtUtils.tokenMap(subject, tokenString);
-			
+
 			WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 			JSONObject.writeJSONString(response.getWriter(), tokenMap);
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +89,7 @@ public class DingTalkAuthenticationSuccessHandler implements AuthenticationSucce
 	public int getOrder() {
 		return Integer.MAX_VALUE - 2;
 	}
-	
+
 	public JwtPayloadRepository getJwtPayloadRepository() {
 		return jwtPayloadRepository;
 	}

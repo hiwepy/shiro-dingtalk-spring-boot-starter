@@ -14,22 +14,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @AutoConfigureBefore( name = {
-	"org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration",  // shiro-spring-boot-web-starter
-	"org.apache.shiro.spring.boot.ShiroBizWebAutoConfiguration" // spring-boot-starter-shiro-biz
+	"org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration",
+	"org.apache.shiro.spring.boot.ShiroBizWebAutoConfiguration"
 })
 @ConditionalOnProperty(prefix = ShiroDingTalkProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroDingTalkProperties.class })
 public class ShiroDingTalkWebAutoConfiguration extends AbstractShiroWebConfiguration implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
-	
+
 	@Bean
 	protected DingTalkAuthenticationSuccessHandler wxAuthenticationSuccessHandler(
 			JwtPayloadRepository jwtPayloadRepository,
 			ShiroJwtProperties jwtProperties) {
 		return new DingTalkAuthenticationSuccessHandler(jwtPayloadRepository, jwtProperties.isCheckExpiry());
 	}
- 
+
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
