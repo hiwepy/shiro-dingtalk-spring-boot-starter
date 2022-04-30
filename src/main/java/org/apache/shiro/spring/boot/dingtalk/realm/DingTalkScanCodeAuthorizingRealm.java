@@ -10,6 +10,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
 import org.apache.shiro.biz.realm.AuthorizingRealmListener;
+import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkMaLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkScanCodeLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkAuthenticationServiceException;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkCodeNotFoundException;
@@ -44,9 +45,8 @@ public class DingTalkScanCodeAuthorizingRealm extends AbstractAuthorizingRealm {
 
     	try {
 
-			DingTalkScanCodeAuthenticationToken dingTalkToken =  (DingTalkScanCodeAuthenticationToken) token;
-			DingTalkScanCodeLoginRequest loginRequest = dingTalkToken.getLoginRequest();
-
+			DingTalkScanCodeAuthenticationToken dingTalkToken = (DingTalkScanCodeAuthenticationToken) token;
+			DingTalkScanCodeLoginRequest loginRequest = (DingTalkScanCodeLoginRequest) dingTalkToken.getPrincipal();
 			if ( !StringUtils.hasText(loginRequest.getLoginTmpCode())) {
 				log.debug("No loginTmpCode found in request.");
 				throw new DingTalkCodeNotFoundException("No loginTmpCode found in request.");

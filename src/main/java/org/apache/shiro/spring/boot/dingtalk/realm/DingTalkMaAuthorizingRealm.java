@@ -19,6 +19,7 @@ import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkLoginProperti
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkPersonalMiniAppProperties;
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkSuiteProperties;
 import org.apache.shiro.spring.boot.dingtalk.token.DingTalkMaAuthenticationToken;
+import org.apache.shiro.spring.boot.dingtalk.token.DingTalkScanCodeAuthenticationToken;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -54,8 +55,8 @@ public class DingTalkMaAuthorizingRealm extends AbstractAuthorizingRealm {
 
     	try {
 
-			DingTalkMaAuthenticationToken dingTalkToken =  (DingTalkMaAuthenticationToken) token;
-			DingTalkMaLoginRequest loginRequest = dingTalkToken.getLoginRequest();
+			DingTalkMaAuthenticationToken dingTalkToken = (DingTalkMaAuthenticationToken) token;
+			DingTalkMaLoginRequest loginRequest = (DingTalkMaLoginRequest) dingTalkToken.getPrincipal();
 
 			if (!StringUtils.hasText(loginRequest.getAuthCode())) {
 				log.debug("No authCode found in request.");

@@ -34,15 +34,16 @@ public class DingTalkMaAuthenticationToken extends DefaultAuthenticationToken {
 	/**
 	 * 登录请求信息
 	 */
-	private DingTalkMaLoginRequest loginRequest;
+	private DingTalkMaLoginRequest principal;
 
-	public DingTalkMaAuthenticationToken(DingTalkMaLoginRequest reqloginRequestuest, String host) {
-		this.loginRequest = loginRequest;
+	public DingTalkMaAuthenticationToken(DingTalkMaLoginRequest loginRequest, String host) {
+		this.principal = loginRequest;
 		this.setHost(host);
 	}
 
-	public DingTalkMaLoginRequest getLoginRequest() {
-		return loginRequest;
+	@Override
+	public Object getPrincipal() {
+		return principal;
 	}
 
 }

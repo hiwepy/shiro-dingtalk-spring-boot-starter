@@ -43,7 +43,7 @@ public class DingTalkTempCodeAuthorizingRealm extends AbstractAuthorizingRealm {
     	try {
 
 			DingTalkTmpCodeAuthenticationToken dingTalkToken = (DingTalkTmpCodeAuthenticationToken) token;
-			DingTalkTmpCodeLoginRequest loginRequest = dingTalkToken.getLoginRequest();
+			DingTalkTmpCodeLoginRequest loginRequest = (DingTalkTmpCodeLoginRequest) dingTalkToken.getPrincipal();
 
 			if (!StringUtils.hasText(loginRequest.getCode())) {
 				log.debug("No Code found in request.");

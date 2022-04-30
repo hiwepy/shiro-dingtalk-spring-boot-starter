@@ -30,15 +30,16 @@ public class DingTalkTmpCodeAuthenticationToken extends DefaultAuthenticationTok
 	/**
 	 * 登录请求信息
 	 */
-	private DingTalkTmpCodeLoginRequest loginRequest;
+	private DingTalkTmpCodeLoginRequest principal;
 
-	public DingTalkTmpCodeAuthenticationToken(DingTalkTmpCodeLoginRequest reqloginRequestuest, String host) {
-		this.loginRequest = loginRequest;
+	public DingTalkTmpCodeAuthenticationToken(DingTalkTmpCodeLoginRequest loginRequest, String host) {
+		this.principal = loginRequest;
 		this.setHost(host);
 	}
 
-	public DingTalkTmpCodeLoginRequest getLoginRequest() {
-		return loginRequest;
+	@Override
+	public Object getPrincipal() {
+		return principal;
 	}
 
 }

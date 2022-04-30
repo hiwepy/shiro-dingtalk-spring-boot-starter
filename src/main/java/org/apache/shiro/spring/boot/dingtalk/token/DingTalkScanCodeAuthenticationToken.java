@@ -31,7 +31,7 @@ public class DingTalkScanCodeAuthenticationToken extends DefaultAuthenticationTo
 	/**
 	 * 登录请求信息
 	 */
-	private DingTalkScanCodeLoginRequest loginRequest;
+	private DingTalkScanCodeLoginRequest principal;
 	/**
 	 * 第三方平台UnionID（通常指第三方账号体系下用户的唯一ID）
 	 */
@@ -45,13 +45,14 @@ public class DingTalkScanCodeAuthenticationToken extends DefaultAuthenticationTo
 	 */
 	protected OapiSnsGetuserinfoBycodeResponse.UserInfo userInfo ;
 
-	public DingTalkScanCodeAuthenticationToken(DingTalkScanCodeLoginRequest reqloginRequestuest, String host) {
-		this.loginRequest = loginRequest;
+	public DingTalkScanCodeAuthenticationToken(DingTalkScanCodeLoginRequest loginRequest, String host) {
+		this.principal = loginRequest;
 		this.setHost(host);
 	}
 
-	public DingTalkScanCodeLoginRequest getLoginRequest() {
-		return loginRequest;
+	@Override
+	public Object getPrincipal() {
+		return principal;
 	}
 
 	public String getUnionid() {
