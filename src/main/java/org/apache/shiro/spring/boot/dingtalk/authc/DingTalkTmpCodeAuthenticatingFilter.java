@@ -16,6 +16,7 @@
 package org.apache.shiro.spring.boot.dingtalk.authc;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -50,8 +51,10 @@ public class DingTalkTmpCodeAuthenticatingFilter extends AbstractTrustableAuthen
 	private String tokenParameter = SPRING_SECURITY_FORM_TOKEN_KEY;
 	private String codeParameter = SPRING_SECURITY_FORM_CODE_KEY;
 
-	public DingTalkTmpCodeAuthenticatingFilter() {
+	private ObjectMapper objectMapper;
+	public DingTalkTmpCodeAuthenticatingFilter(ObjectMapper objectMapper) {
 		super();
+		this.objectMapper = objectMapper;
 	}
 
 	@Override
@@ -96,7 +99,7 @@ public class DingTalkTmpCodeAuthenticatingFilter extends AbstractTrustableAuthen
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
+				objectMapper.writeValue(response.getOutputStream(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
 
 				return false;
 			}
@@ -117,7 +120,7 @@ public class DingTalkTmpCodeAuthenticatingFilter extends AbstractTrustableAuthen
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
+				objectMapper.writeValue(response.getOutputStream(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
 
 				return false;
 			}
@@ -186,30 +189,6 @@ public class DingTalkTmpCodeAuthenticatingFilter extends AbstractTrustableAuthen
 
 	protected String obtainCode(ServletRequest request) {
 		return request.getParameter(codeParameter);
-	}
-
-	public String getKeyParameter() {
-		return keyParameter;
-	}
-
-	public void setKeyParameter(String keyParameter) {
-		this.keyParameter = keyParameter;
-	}
-
-	public void setTokenParameter(String tokenParameter) {
-		this.tokenParameter = tokenParameter;
-	}
-
-	public String getTokenParameter() {
-		return tokenParameter;
-	}
-
-	public String getCodeParameter() {
-		return codeParameter;
-	}
-
-	public void setCodeParameter(String codeParameter) {
-		this.codeParameter = codeParameter;
 	}
 
 }

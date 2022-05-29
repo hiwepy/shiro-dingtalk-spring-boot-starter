@@ -1,9 +1,15 @@
 package org.apache.shiro.spring.boot;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkAuthenticationSuccessHandler;
 import org.apache.shiro.spring.boot.jwt.JwtPayloadRepository;
 import org.apache.shiro.spring.web.config.AbstractShiroWebConfiguration;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,9 +31,21 @@ public class ShiroDingTalkWebAutoConfiguration extends AbstractShiroWebConfigura
 
 	@Bean
 	protected DingTalkAuthenticationSuccessHandler wxAuthenticationSuccessHandler(
-			JwtPayloadRepository jwtPayloadRepository,
+			ObjectProvider<ObjectMapper> objectMapperProvider,
+			ObjectProvider<JwtPayloadRepository> jwtPayloadRepositoryProvider,
 			ShiroJwtProperties jwtProperties) {
-		return new DingTalkAuthenticationSuccessHandler(jwtPayloadRepository, jwtProperties.isCheckExpiry());
+
+		ObjectMapper objectMapper = objectMapperProvider.getIfAvailable(() -> {
+			ObjectMapper objectMapperDef = new ObjectMapper();
+			objectMapperDef.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+			objectMapperDef.enable(MapperFeature.USE_GETTERS_AS_SETTERS);
+			objectMapperDef.enable(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS);
+			objectMapperDef.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+			objectMapperDef.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			return objectMapperDef;
+		});
+
+		return new DingTalkAuthenticationSuccessHandler(objectMapper, jwtPayloadRepositoryProvider.getIfAvailable(), jwtProperties.isCheckExpiry());
 	}
 
 	@Override

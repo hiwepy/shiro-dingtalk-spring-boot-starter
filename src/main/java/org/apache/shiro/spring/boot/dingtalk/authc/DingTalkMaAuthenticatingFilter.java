@@ -21,6 +21,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -54,8 +55,10 @@ public class DingTalkMaAuthenticatingFilter extends AbstractTrustableAuthenticat
 	private String tokenParameter = SPRING_SECURITY_FORM_TOKEN_KEY;
 	private String authCodeParameter = SPRING_SECURITY_FORM_CODE_KEY;
 
-	public DingTalkMaAuthenticatingFilter() {
+	private ObjectMapper objectMapper;
+	public DingTalkMaAuthenticatingFilter(ObjectMapper objectMapper) {
 		super();
+		this.objectMapper = objectMapper;
 	}
 
 	@Override
@@ -100,7 +103,7 @@ public class DingTalkMaAuthenticatingFilter extends AbstractTrustableAuthenticat
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
+				objectMapper.writeValue(response.getOutputStream(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
 
 				return false;
 			}
@@ -121,7 +124,7 @@ public class DingTalkMaAuthenticatingFilter extends AbstractTrustableAuthenticat
 				response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
+				objectMapper.writeValue(response.getOutputStream(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
 
 				return false;
 			}
@@ -192,30 +195,6 @@ public class DingTalkMaAuthenticatingFilter extends AbstractTrustableAuthenticat
 
 	protected String obtainAuthCode(ServletRequest request) {
 		return request.getParameter(authCodeParameter);
-	}
-
-	public String getKeyParameter() {
-		return keyParameter;
-	}
-
-	public void setKeyParameter(String keyParameter) {
-		this.keyParameter = keyParameter;
-	}
-
-	public void setTokenParameter(String tokenParameter) {
-		this.tokenParameter = tokenParameter;
-	}
-
-	public String getTokenParameter() {
-		return tokenParameter;
-	}
-
-	public String getAuthCodeParameter() {
-		return authCodeParameter;
-	}
-
-	public void setAuthCodeParameter(String authCodeParameter) {
-		this.authCodeParameter = authCodeParameter;
 	}
 
 }

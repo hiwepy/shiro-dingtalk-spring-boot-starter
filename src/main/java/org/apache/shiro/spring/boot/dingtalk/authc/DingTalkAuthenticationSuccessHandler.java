@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.authc.AuthenticationSuccessHandler;
 import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
@@ -36,19 +37,16 @@ import org.apache.shiro.spring.boot.utils.SubjectJwtUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.MediaType;
 
-import com.alibaba.fastjson.JSONObject;
-
 public class DingTalkAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+	private ObjectMapper objectMapper;
 	private JwtPayloadRepository jwtPayloadRepository;
 	/** If Check JWT Validity. */
 	private boolean checkExpiry = false;
 
-	public DingTalkAuthenticationSuccessHandler() {
-	}
-
-	public DingTalkAuthenticationSuccessHandler(JwtPayloadRepository jwtPayloadRepository, boolean checkExpiry) {
+	public DingTalkAuthenticationSuccessHandler(ObjectMapper objectMapper, JwtPayloadRepository jwtPayloadRepository, boolean checkExpiry) {
 		super();
+		this.objectMapper = objectMapper;
 		this.jwtPayloadRepository = jwtPayloadRepository;
 		this.checkExpiry = checkExpiry;
 	}
@@ -69,7 +67,7 @@ public class DingTalkAuthenticationSuccessHandler implements AuthenticationSucce
 			// 账号首次登陆标记
 			if(ShiroPrincipal.class.isAssignableFrom(subject.getPrincipal().getClass())) {
 				// JSON Web Token (JWT)
-				tokenString = getJwtPayloadRepository().issueJwt(token, subject, request, response);
+				tokenString = getJwtPayloadRepository().issueJwt(token, subject);
 			}
 
 			Map<String, Object> tokenMap = SubjectJwtUtils.tokenMap(subject, tokenString);
@@ -77,7 +75,7 @@ public class DingTalkAuthenticationSuccessHandler implements AuthenticationSucce
 			WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-			JSONObject.writeJSONString(response.getWriter(), tokenMap);
+			objectMapper.writeValue(response.getWriter(), tokenMap);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -92,18 +90,6 @@ public class DingTalkAuthenticationSuccessHandler implements AuthenticationSucce
 
 	public JwtPayloadRepository getJwtPayloadRepository() {
 		return jwtPayloadRepository;
-	}
-
-	public void setJwtPayloadRepository(JwtPayloadRepository jwtPayloadRepository) {
-		this.jwtPayloadRepository = jwtPayloadRepository;
-	}
-
-	public boolean isCheckExpiry() {
-		return checkExpiry;
-	}
-
-	public void setCheckExpiry(boolean checkExpiry) {
-		this.checkExpiry = checkExpiry;
 	}
 
 }
