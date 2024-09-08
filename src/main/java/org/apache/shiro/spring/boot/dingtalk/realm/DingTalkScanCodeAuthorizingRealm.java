@@ -10,7 +10,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
 import org.apache.shiro.biz.realm.AuthorizingRealmListener;
-import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkMaLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkScanCodeLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkAuthenticationServiceException;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkCodeNotFoundException;
@@ -58,7 +57,8 @@ public class DingTalkScanCodeAuthorizingRealm extends AbstractAuthorizingRealm {
 			}
 
 			String appKey = loginRequest.getKey();
-			String appSecret = dingTalkTemplate.getAppSecret(loginRequest.getKey());
+			String corpId = dingTalkTemplate.getCorpId(appKey);
+			String appSecret = dingTalkTemplate.getAppSecret(corpId, appKey);
 			if (StringUtils.hasText(loginRequest.getLoginTmpCode())) {
 
 				// 第三方应用钉钉扫码登录：通过临时授权码Code获取用户信息，临时授权码只能使用一次

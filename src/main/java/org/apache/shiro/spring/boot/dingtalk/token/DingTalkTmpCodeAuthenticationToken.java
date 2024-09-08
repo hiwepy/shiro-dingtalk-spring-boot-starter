@@ -16,7 +16,6 @@
 package org.apache.shiro.spring.boot.dingtalk.token;
 
 import org.apache.shiro.biz.authc.token.DefaultAuthenticationToken;
-import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkScanCodeLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkTmpCodeLoginRequest;
 
 /**

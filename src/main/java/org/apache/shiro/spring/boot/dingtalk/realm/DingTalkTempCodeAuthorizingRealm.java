@@ -59,7 +59,8 @@ public class DingTalkTempCodeAuthorizingRealm extends AbstractAuthorizingRealm {
 				if (StringUtils.hasText(loginRequest.getCode())) {
 
 					String appKey = loginRequest.getKey();
-					String appSecret = dingTalkTemplate.getAppSecret(loginRequest.getKey());
+					String corpId = dingTalkTemplate.getCorpId(appKey);
+					String appSecret = dingTalkTemplate.getAppSecret(corpId, appKey);
 					// 获取access_token
 					String accessToken = dingTalkTemplate.getAccessToken(appKey, appSecret);
 					loginRequest.setAccessToken(accessToken);

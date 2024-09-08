@@ -15,13 +15,8 @@
  */
 package org.apache.shiro.spring.boot.dingtalk.token;
 
-import com.dingtalk.api.response.OapiUserGetResponse.Roles;
 import org.apache.shiro.biz.authc.token.DefaultAuthenticationToken;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkMaLoginRequest;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * DingTalk Authentication Token

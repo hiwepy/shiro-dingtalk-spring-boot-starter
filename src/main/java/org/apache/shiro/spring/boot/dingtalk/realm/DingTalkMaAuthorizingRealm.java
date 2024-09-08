@@ -1,30 +1,21 @@
 package org.apache.shiro.spring.boot.dingtalk.realm;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.dingtalk.spring.boot.DingTalkTemplate;
+import com.taobao.api.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
 import org.apache.shiro.biz.realm.AuthorizingRealmListener;
-import org.apache.shiro.spring.boot.ShiroDingTalkProperties;
 import org.apache.shiro.spring.boot.dingtalk.authc.DingTalkMaLoginRequest;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkAuthenticationServiceException;
 import org.apache.shiro.spring.boot.dingtalk.exception.DingTalkCodeNotFoundException;
-import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkCropAppProperties;
-import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkLoginProperties;
-import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkPersonalMiniAppProperties;
-import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkSuiteProperties;
 import org.apache.shiro.spring.boot.dingtalk.token.DingTalkMaAuthenticationToken;
-import org.apache.shiro.spring.boot.dingtalk.token.DingTalkScanCodeAuthenticationToken;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.taobao.api.ApiException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * DingTalk AuthorizingRealm
@@ -70,9 +61,9 @@ public class DingTalkMaAuthorizingRealm extends AbstractAuthorizingRealm {
 
 			try {
 				if (StringUtils.hasText(loginRequest.getAuthCode())) {
-
 					String appKey = loginRequest.getKey();
-					String appSecret = dingTalkTemplate.getAppSecret(loginRequest.getKey());
+					String corpId = dingTalkTemplate.getCorpId(appKey);
+					String appSecret = dingTalkTemplate.getAppSecret(corpId, appKey);
 					// 获取access_token
 					String accessToken = dingTalkTemplate.getAccessToken(appKey, appSecret);
 					loginRequest.setAccessToken(accessToken);

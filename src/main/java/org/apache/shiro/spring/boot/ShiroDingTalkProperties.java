@@ -15,17 +15,16 @@
  */
 package org.apache.shiro.spring.boot;
 
-import java.util.List;
-
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkCropAppProperties;
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkLoginProperties;
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkPersonalMiniAppProperties;
 import org.apache.shiro.spring.boot.dingtalk.property.ShiroDingTalkSuiteProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.List;
 
 @ConfigurationProperties(ShiroDingTalkProperties.PREFIX)
 @Getter

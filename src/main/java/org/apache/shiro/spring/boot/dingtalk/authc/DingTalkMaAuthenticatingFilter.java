@@ -15,12 +15,7 @@
  */
 package org.apache.shiro.spring.boot.dingtalk.authc;
 
-import java.nio.charset.StandardCharsets;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -36,7 +31,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.nio.charset.StandardCharsets;
 
 /**
  * https://open.dingtalk.com/document/orgapp-client/mini-program-free-login

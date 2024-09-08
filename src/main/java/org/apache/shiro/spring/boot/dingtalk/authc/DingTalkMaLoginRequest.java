@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DingTalkMaLoginRequest {
-
+	/**
+	 * 应用的唯一标识key
+	 */
+	protected String corpId;
 	/**
 	 * 应用的唯一标识key
 	 */
