@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.github.hiwepy</groupId>
+	<groupId>io.github.hiwepy</groupId>
 	<artifactId>shiro-dingtalk-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Shiro With Dingtalk</description>
 	<version>2.7.x.20241003.RELEASE</version>
@@ -372,18 +372,18 @@
 		<dependencies>
 			<!-- https://github.com/hiwepy/shiro-biz-spring-boot-starter -->
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>shiro-biz-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-shiro-biz.version}</version>
 			</dependency>
 			<!-- https://github.com/hiwepy/shiro-jwt-spring-boot-starter -->
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>shiro-jwt-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-shiro-jwt.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>dingtalk-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-dingtalk.version}</version>
 			</dependency>
@@ -453,17 +453,17 @@
 
 		<!-- https://mvnrepository.com/artifact/com.github.hiwepy/shiro-biz-spring-boot-starter -->
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>shiro-biz-spring-boot-starter</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hiwepy/shiro-jwt-spring-boot-starter -->
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>shiro-jwt-spring-boot-starter</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hiwepy/dingtalk-spring-boot-starter -->
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>dingtalk-spring-boot-starter</artifactId>
 		</dependency>
 
