@@ -9,7 +9,7 @@
 		<relativePath /> 
 	</parent>
 
-	<groupId>com.github.hiwepy</groupId>
+	<groupId>io.github.hiwepy</groupId>
 	<artifactId>shiro-dingtalk-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Shiro With Dingtalk</description>
 	<version>4.0.x.20251227-SNAPSHOT</version>
@@ -356,18 +356,18 @@
 		<dependencies>
 			
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>shiro-biz-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-shiro-biz.version}</version>
 			</dependency>
 			
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>shiro-jwt-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-shiro-jwt.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.hiwepy</groupId>
+				<groupId>io.github.hiwepy</groupId>
 				<artifactId>dingtalk-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-dingtalk.version}</version>
 			</dependency>
@@ -437,17 +437,17 @@
 
 		
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>shiro-biz-spring-boot-starter</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>shiro-jwt-spring-boot-starter</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.github.hiwepy</groupId>
+			<groupId>io.github.hiwepy</groupId>
 			<artifactId>dingtalk-spring-boot-starter</artifactId>
 		</dependency>
 
