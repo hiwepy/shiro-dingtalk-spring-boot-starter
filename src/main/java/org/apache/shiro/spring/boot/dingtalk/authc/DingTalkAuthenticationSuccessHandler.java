@@ -30,8 +30,8 @@ import org.apache.shiro.spring.boot.utils.SubjectJwtUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.MediaType;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
