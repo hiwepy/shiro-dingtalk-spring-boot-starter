@@ -29,8 +29,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import java.nio.charset.StandardCharsets;
 
 /**
